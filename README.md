@@ -15,3 +15,6 @@ npm run dev
 npm run build
 ```
 
+## Test the application
+
+You can test the application online at <http://french.rochalabs.com>.
