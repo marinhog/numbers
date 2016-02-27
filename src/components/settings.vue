@@ -2,21 +2,22 @@
     <div class="row">
         <div class="column-1-2 column-center">
             <div class="message-box font-size-large padding-xsmall animated" v-if="showMessage" transition="flip" @click="hideMessage">
-                {{message}}
+                {{$t('settings.message')}}
             </div>
         </div>
         <div class="column-1-2 column-center">
+            <p>{{$t('settings.instructions')}}</p>
             <form role="form">
-                <label for="from">First number</label>
-                <input type="text" id="from" placeholder="First number" v-model="from">
-                <label for="to">Last number</label>
-                <input type="text" id="to" placeholder="Last numbers" v-model="to">
-                <label class="control checkbox">
+                <label for="from">{{$t('settings.first_number')}}</label>
+                <input type="text" id="from" v-model="from">
+                <label for="to">{{$t('settings.last_number')}}</label>
+                <input type="text" id="to" v-model="to">
+                <!-- <label class="control checkbox">
                     <input type="checkbox" name="checkbox" v-model="isTraining">
                     <span class="control-indicator"></span>
-                    <span class="control-label">Training Mode</span>
-                </label>
-                <button class="buttom" @click.prevent="start">Start</button>
+                    <span class="control-label">Treinamento</span>
+                </label> -->
+                <button class="buttom" @click.prevent="start">{{$t('settings.start')}}</button>
             </form>
         </div>
     </div>
@@ -33,10 +34,9 @@
         data: function() {
             return {
                 from: 0,
-                to: 10,
+                to: 100,
                 isTraining: false,
-                showMessage: false,
-                message: ''
+                showMessage: false
             }
         },
         methods: {
@@ -46,7 +46,6 @@
                 var to = parseInt(this.to);
                 if (from >= to) {
                     this.showMessage = true;
-                    this.message = 'First number should be smaller than last number.';
                     return;
                 }
                 this.$dispatch('started', {
@@ -57,7 +56,6 @@
             },
             hideMessage: function() {
                 this.showMessage = false;
-                this.message = '';
             }
         }
     }

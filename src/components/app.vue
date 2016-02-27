@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="column-1">
-                <h1 class="title">Learning Numbers</h1>
+                <h1 class="title" v-if="!runningInIframe()">Numbers</h1>
                 <div class="animated" :class="{'fadeIn': !isRunning}" v-show="!isRunning">
                     <settings @started="start"></settings>
                 </div>
@@ -20,13 +20,14 @@
                                 {{numberDescription}}
                             </div>
                         </div>
-                        <div class="column-1 text-center font-size-xxl animated" :class="{'rubberBand': completed}" v-else>
+                        <div class="column-1 text-center font-size-xxl animated" :class="{'bounceInDown': completed}" v-else>
                             <div class="row">
                                 <div class="column-1">
                                     {{seconds | secToTime}}
                                 </div>
-                                <div class="column-1 text-center font-size-medium padding-bottom-medium" v-if="isTraining">
-                                    Training complete!
+                                <div class="column-1 text-center font-size-medium padding-bottom-medium">
+                                    {{$t('app.message_seconds_per_number', [this.secondsPerNumber])}}<br>
+                                    {{congratulationMessage}}
                                 </div>
                             </div>
                         </div>
@@ -39,16 +40,16 @@
                                 </div>
                                 <div class="column-1-3">
                                     <div class="text-center">
-                                        <button @click="previous">Previous</button>
+                                        <button @click="previous">{{$t('app.previous')}}</button>
                                         <button @click="next" :disabled="completed">
-                                            <span v-if="currentIndex < numbers.length - 1">Next</span>
-                                            <span v-else>Finish</span>
+                                            <span v-if="currentIndex < numbers.length - 1">{{$t('app.next')}}</span>
+                                            <span v-else>{{$t('app.finish')}}</span>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="column-1-3">
                                     <div class="text-right">
-                                        <button class="buttom" @click="new" v-if="isRunning">Back</button>
+                                        <button class="buttom" @click="new" v-if="isRunning">{{$t('app.new')}}</button>
                                     </div>
                                 </div>
                             </div>
@@ -63,6 +64,7 @@
 <script>
 import Settings from './Settings.vue'
 import Numbers from '../utilities/numbers.js'
+import BrowserHeler from '../utilities/browser_helper.js'
 
 module.exports = {
     components: {
@@ -98,6 +100,28 @@ module.exports = {
         },
         numberDescription: function() {
             return Numbers.getText(this.numbers[this.currentIndex]);
+        },
+        numbersPerSecond: function() {
+            return (this.numbers.length / this.seconds).toFixed(2);
+        },
+        secondsPerNumber: function() {
+            return (this.seconds / this.numbers.length).toFixed(2);  
+        },
+        congratulationMessage: function() {
+            if (this.secondsPerNumber < 1) {
+                return this.$t('app.message_less_one');
+            }
+            else if (this.secondsPerNumber < 1.5) {
+                return this.$t('app.message_less_one_half');
+            }
+            else if (this.secondsPerNumber < 2) {
+                return this.$t('app.message_less_two');
+            }
+
+            return this.$t('app.message_more_two');
+        },
+        runningInIframe: function() {
+            return BrowserHeler.runningInIframe
         }
     },
     methods: {
@@ -118,7 +142,7 @@ module.exports = {
             if (this.currentIndex < this.numbers.length - 1) {
                 this.currentIndex++;
             } else {
-                this.completed = true;
+                this.finish();
             }
         },
         previous: function() {
@@ -129,6 +153,9 @@ module.exports = {
             else if (this.currentIndex > 0) {
                 this.currentIndex--;
             }
+        },
+        finish: function() {
+            this.completed = true;
         },
         timer: function() {
             if (!this.isRunning || this.completed) {
