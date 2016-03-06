@@ -1,58 +1,60 @@
 <template>
-    <div class="container">
+    <div class="container container-xsmall">
         <div class="row">
             <div class="column-1">
-                <h1 class="title" v-if="!runningInIframe()">Numbers</h1>
+                <h1 class="title" v-if="!runningInIframe()">{{$t('app.title')}}</h1>
                 <div class="animated" :class="{'fadeIn': !isRunning}" v-show="!isRunning">
                     <settings @started="start"></settings>
                 </div>
-                <div class="column-1 animated" v-if="isRunning" :class="{'fadeIn': isRunning}">
-                    <div class="row">
-                        <div class="column-1-2 column-offset-1-2">
-                            <div class="text-right font-size-large" v-if="!completed">{{seconds | secToTime}}</div>
-                            <div class="text-right font-size-large" v-else>&nbsp;</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column-1 animated" v-if="isRunning" :class="{'fadeIn': isRunning}">
+                <div class="row">
+                    <div class="column-1-2 column-offset-1-2">
+                        <div class="text-right font-size-large" v-if="!completed">{{seconds | secToTime}}</div>
+                        <div class="text-right font-size-large" v-else>&nbsp;</div>
+                    </div>
+                </div>
+                <div class="row" v-if="!completed">
+                    <div class="column-1 text-center font-size-xxl">
+                        {{numbers[currentIndex]}}
+                        <div class="row text-center font-size-medium padding-bottom-medium" v-if="isTraining">
+                            {{numberDescription}}
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="column-1 text-center font-size-xxl" v-if="!completed">
-                            {{numbers[currentIndex]}}
-                            <div class="row text-center font-size-medium padding-bottom-medium" v-if="isTraining">
-                                {{numberDescription}}
+                </div>
+                <div class="row" v-if="completed">
+                    <div class="column-1 text-center font-size-xxl animated" :class="{'bounceInDown': completed}">
+                        <div class="row">
+                            <div class="column-1">
+                                {{seconds | secToTime}}
+                            </div>
+                            <div class="column-1 text-center font-size-medium padding-bottom-medium">
+                                {{$t('app.message_seconds_per_number', [this.secondsPerNumber])}}<br>
+                                {{congratulationMessage}}
                             </div>
                         </div>
-                        <div class="column-1 text-center font-size-xxl animated" :class="{'bounceInDown': completed}" v-else>
-                            <div class="row">
-                                <div class="column-1">
-                                    {{seconds | secToTime}}
-                                </div>
-                                <div class="column-1 text-center font-size-medium padding-bottom-medium">
-                                    {{$t('app.message_seconds_per_number', [this.secondsPerNumber])}}<br>
-                                    {{congratulationMessage}}
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column-1-3">
+                        <div class="progress background-light-grey padding-xxs" v-if="numbers.length">
+                            <div class="background-primary full-height" :style="{ width: percentage }">&nbsp;</div>
                         </div>
-                        <div class="column-1">
-                            <div class="row">
-                                <div class="column-1-3">
-                                    <div class="progress background-light-grey padding-xxs" v-if="numbers.length">
-                                        <div class="background-primary full-height" :style="{ width: percentage }">&nbsp;</div>
-                                    </div>
-                                </div>
-                                <div class="column-1-3">
-                                    <div class="text-center">
-                                        <button @click="previous">{{$t('app.previous')}}</button>
-                                        <button @click="next" :disabled="completed">
-                                            <span v-if="currentIndex < numbers.length - 1">{{$t('app.next')}}</span>
-                                            <span v-else>{{$t('app.finish')}}</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="column-1-3">
-                                    <div class="text-right">
-                                        <button class="buttom" @click="new" v-if="isRunning">{{$t('app.new')}}</button>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="column-1-3">
+                        <div class="text-center">
+                            <button @click="previous">{{$t('app.previous')}}</button>
+                            <button @click="next" :disabled="completed">
+                                <span v-if="currentIndex < numbers.length - 1">{{$t('app.next')}}</span>
+                                <span v-else>{{$t('app.finish')}}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="column-1-3">
+                        <div class="text-right">
+                            <button class="buttom" @click="new" v-if="isRunning">{{$t('app.new')}}</button>
                         </div>
                     </div>
                 </div>
