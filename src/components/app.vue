@@ -1,61 +1,67 @@
 <template>
-    <div class="container container-xsmall">
+    <div class="container">
         <div class="row">
-            <div class="column-1">
+            <div class="col-sm-12">
                 <h1 class="title" v-if="!runningInIframe()">{{$t('app.title')}}</h1>
                 <div class="animated" :class="{'fadeIn': !isRunning}" v-show="!isRunning">
                     <settings @started="start"></settings>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="column-1 animated" v-if="isRunning" :class="{'fadeIn': isRunning}">
+        <div class="row animated" v-if="isRunning" :class="{'fadeIn': isRunning}">
+            <div class="col-sm-12">
+                
+                <!-- TIMER -->
                 <div class="row">
-                    <div class="column-1-2 column-offset-1-2">
-                        <div class="text-right font-size-large" v-if="!completed">{{seconds | secToTime}}</div>
-                        <div class="text-right font-size-large" v-else>&nbsp;</div>
+                    <div class="col-sm-12 text-right">
+                        <span v-if="!completed">{{seconds | secToTime}}</span>
+                        <span v-else>&nbsp;</span>
                     </div>
                 </div>
+
+                <!-- NUMBER PANEL -->
                 <div class="row" v-if="!completed">
-                    <div class="column-1 text-center font-size-xxl">
-                        {{numbers[currentIndex]}}
-                        <div class="row text-center font-size-medium padding-bottom-medium" v-if="isTraining">
+                    <div class="col-sm-12 text-center">
+                        <span class="font-size-xxl">{{numbers[currentIndex]}}</span>
+                        <div class="row text-center" v-if="isTraining">
                             {{numberDescription}}
                         </div>
                     </div>
                 </div>
+
+                <!-- COMPLETED PANEL -->
                 <div class="row" v-if="completed">
-                    <div class="column-1 text-center font-size-xxl animated" :class="{'bounceInDown': completed}">
+                    <div class="col-sm-12 text-center animated" :class="{'bounceInDown': completed}">
                         <div class="row">
-                            <div class="column-1">
+                            <div class="col-sm-12 font-size-xxl">
                                 {{seconds | secToTime}}
                             </div>
-                            <div class="column-1 text-center font-size-medium padding-bottom-medium">
-                                {{$t('app.message_seconds_per_number', [this.secondsPerNumber])}}<br>
-                                {{congratulationMessage}}
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 text-center congratulation-message">
+                                <div>{{$t('app.message_seconds_per_number', [this.secondsPerNumber])}}</div>
+                                <div>{{congratulationMessage}}</div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- BUTTONS PANEL -->
                 <div class="row">
-                    <div class="column-1-3">
-                        <div class="progress background-light-grey padding-xxs" v-if="numbers.length">
-                            <div class="background-primary full-height" :style="{ width: percentage }">&nbsp;</div>
+                    <div class="col-sm-4">
+                        <div class="progress" v-if="numbers.length">
+                            <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" :style="{ width: percentage }">&nbsp;</div>
                         </div>
                     </div>
-                    <div class="column-1-3">
-                        <div class="text-center">
-                            <button @click="previous">{{$t('app.previous')}}</button>
-                            <button @click="next" :disabled="completed">
-                                <span v-if="currentIndex < numbers.length - 1">{{$t('app.next')}}</span>
-                                <span v-else>{{$t('app.finish')}}</span>
-                            </button>
-                        </div>
+                    <div class="col-sm-4 text-center">
+                        <button class="btn" @click="previous">{{$t('app.previous')}}</button>
+                        <button class="btn" @click="next" :disabled="completed">
+                            <span v-if="currentIndex < numbers.length - 1">{{$t('app.next')}}</span>
+                            <span v-else>{{$t('app.finish')}}</span>
+                        </button>
                     </div>
-                    <div class="column-1-3">
-                        <div class="text-right">
-                            <button class="buttom" @click="new" v-if="isRunning">{{$t('app.new')}}</button>
-                        </div>
+                    <div class="col-sm-4 text-right">
+                        <button class="btn" @click="new" v-if="isRunning">{{$t('app.new')}}</button>
                     </div>
                 </div>
             </div>
@@ -209,6 +215,14 @@ module.exports = {
         font-size: 25rem; 
     }
 
+    .congratulation-message {
+        margin: 0 0 30px 0;
+    }
+
+    .progress {
+        margin-top: 5px;
+    }
+
     @media screen and (max-width: 800px) {
         .font-size-xxl { 
             font-size: 15rem; 
@@ -219,13 +233,5 @@ module.exports = {
         .font-size-xxl { 
             font-size: 8rem; 
         }
-    }
-
-    .padding-xxs { 
-        padding: 1rem; 
-    }
-
-    .progress {
-        margin-bottom: 5px;
     }
 </style>
