@@ -48,20 +48,20 @@
 
                 <!-- BUTTONS PANEL -->
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 col-xs-12">
                         <div class="progress" v-if="numbers.length">
                             <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" :style="{ width: percentage }">&nbsp;</div>
                         </div>
                     </div>
-                    <div class="col-sm-4 text-center">
-                        <button class="btn" @click="previous">{{$t('app.previous')}}</button>
-                        <button class="btn" @click="next" :disabled="completed">
+                    <div class="col-sm-4 col-xs-8 nav-buttons">
+                        <button class="btn btn-lg" @click="previous">{{$t('app.previous')}}</button>
+                        <button class="btn btn-lg" @click="next" :disabled="completed">
                             <span v-if="currentIndex < numbers.length - 1">{{$t('app.next')}}</span>
                             <span v-else>{{$t('app.finish')}}</span>
                         </button>
                     </div>
-                    <div class="col-sm-4 text-right">
-                        <button class="btn" @click="new" v-if="isRunning">{{$t('app.new')}}</button>
+                    <div class="col-sm-4 col-xs-4">
+                        <button class="btn btn-lg pull-right" @click="new" v-if="isRunning">{{$t('app.new')}}</button>
                     </div>
                 </div>
             </div>
@@ -220,18 +220,24 @@ module.exports = {
     }
 
     .progress {
-        margin-top: 5px;
+        margin-top: 12px;
     }
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 1024px) {
         .font-size-xxl { 
             font-size: 15rem; 
         }
     }
 
-    @media screen and (max-width: 550px) {
+    @media screen and (max-width: 768px) {
         .font-size-xxl { 
             font-size: 8rem; 
+        }
+    }
+    
+    @media screen and (min-width: 768px) {
+        .nav-buttons {
+            text-align: center;
         }
     }
 </style>

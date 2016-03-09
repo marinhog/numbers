@@ -20,7 +20,7 @@
                     <label for="to">{{$t('settings.last_number')}}</label>
                     <input class="form-control" type="text" id="to" v-model="to">
                 </div>
-                <button class="btn" @click.prevent="start">{{$t('settings.start')}}</button>
+                <button class="btn btn-lg" @click.prevent="start">{{$t('settings.start')}}</button>
             </form>
         </div>
     </div>
